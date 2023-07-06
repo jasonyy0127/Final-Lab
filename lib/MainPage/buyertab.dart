@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 import '../Model/item.dart';
 import '../Model/user.dart';
+import 'buyercartpage.dart';
 
 class BuyerTab extends StatefulWidget {
   const BuyerTab({
@@ -26,12 +27,16 @@ class _BuyerTabState extends State<BuyerTab> {
   late int axiscount = 2;
   String selectedOption = '';
   String option = '';
+  int numofpage = 1, curpage = 1;
+  int numberofresult = 0;
+  var color;
+  int cartqty = 0;
 
   TextEditingController searchController = TextEditingController();
   @override
   void initState() {
     super.initState();
-    loadBuyerItems();
+    loadBuyerItems(1);
     print("Buyer");
   }
 
@@ -66,7 +71,27 @@ class _BuyerTabState extends State<BuyerTab> {
               onPressed: () {
                 showsearchDialog();
               },
-              icon: const Icon(Icons.search))
+              icon: const Icon(Icons.search)),
+          TextButton.icon(
+            icon: const Icon(
+              Icons.shopping_cart,
+            ), // Your icon here
+            label: Text(cartqty.toString()), // Your text here
+            onPressed: () async {
+              if (cartqty > 0) {
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (content) => BuyerCartPage(
+                              user: widget.user,
+                            )));
+                loadBuyerItems(1);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("No item in cart")));
+              }
+            },
+          )
         ],
       ),
       body: itemList.isEmpty
@@ -129,21 +154,56 @@ class _BuyerTabState extends State<BuyerTab> {
                             ),
                           );
                         },
-                      )))
+                      ))),
+              SizedBox(
+                height: 50,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: numofpage,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    //build the list for textbutton with scroll
+                    if ((curpage - 1) == index) {
+                      //set current page number active
+                      color = Colors.red;
+                    } else {
+                      color = Colors.black;
+                    }
+                    return TextButton(
+                        onPressed: () {
+                          curpage = index + 1;
+                          loadBuyerItems(index + 1);
+                        },
+                        child: Text(
+                          (index + 1).toString(),
+                          style: TextStyle(color: color, fontSize: 18),
+                        ));
+                  },
+                ),
+              ),
             ]),
     );
   }
 
-  void loadBuyerItems() {
+  void loadBuyerItems(int pg) {
     http.post(
         Uri.parse("https://uumitproject.com/barterIt/buyer/load_item.php"),
-        body: {}).then((response) {
+        body: {
+          "cartuserid": widget.user.id,
+          "pageno": pg.toString()
+        }).then((response) {
       //print(response.body);
       itemList.clear();
       if (response.statusCode == 200) {
         var jsondata = jsonDecode(response.body);
         if (jsondata['status'] == "success") {
+          numofpage = int.parse(jsondata['numofpage']); //get number of pages
+          numberofresult = int.parse(jsondata['numberofresult']);
+          print(numofpage);
+          print(numberofresult);
           var extractdata = jsondata['data'];
+          cartqty = int.parse(jsondata['cartqty'].toString());
+          print(cartqty);
           extractdata['items'].forEach((v) {
             itemList.add(Item.fromJson(v));
           });

@@ -95,7 +95,7 @@ class _SellerTabState extends State<SellerTab> {
                                                 user: widget.user,
                                                 selleritem: selleritem,
                                               )));
-                                  // loadSellerItems(context);
+                                  loadSellerItems(context);
                                 },
                                 child: Column(children: [
                                   CachedNetworkImage(
