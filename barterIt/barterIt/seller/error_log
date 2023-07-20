@@ -1,0 +1,48 @@
+[03-Jun-2023 07:51:08 UTC] PHP Notice:  Undefined index: itemquantity in /home4/uumitpro/public_html/barterIt/seller/insertitem.php on line 14
+[03-Jun-2023 07:51:08 UTC] PHP Warning:  file_put_contents(../assets/itemes/1.png): failed to open stream: No such file or directory in /home4/uumitpro/public_html/barterIt/seller/insertitem.php on line 29
+[03-Jun-2023 07:51:23 UTC] PHP Notice:  Undefined index: itemquantity in /home4/uumitpro/public_html/barterIt/seller/insertitem.php on line 14
+[03-Jun-2023 07:51:23 UTC] PHP Warning:  file_put_contents(../assets/itemes/2.png): failed to open stream: No such file or directory in /home4/uumitpro/public_html/barterIt/seller/insertitem.php on line 29
+[03-Jun-2023 07:53:28 UTC] PHP Warning:  file_put_contents(../assets/itemes/1.png): failed to open stream: No such file or directory in /home4/uumitpro/public_html/barterIt/seller/insertitem.php on line 29
+[03-Jun-2023 07:53:34 UTC] PHP Warning:  file_put_contents(../assets/itemes/2.png): failed to open stream: No such file or directory in /home4/uumitpro/public_html/barterIt/seller/insertitem.php on line 29
+[03-Jun-2023 13:31:09 UTC] PHP Notice:  Undefined index: item_qty in /home4/uumitpro/public_html/barterIt/seller/load_item.php on line 25
+[03-Jun-2023 13:32:26 UTC] PHP Notice:  Undefined index: item_qty in /home4/uumitpro/public_html/barterIt/seller/load_item.php on line 25
+[03-Jun-2023 13:32:33 UTC] PHP Notice:  Undefined index: item_qty in /home4/uumitpro/public_html/barterIt/seller/load_item.php on line 25
+[03-Jun-2023 13:33:21 UTC] PHP Notice:  Undefined index: item_qty in /home4/uumitpro/public_html/barterIt/seller/load_item.php on line 25
+[03-Jun-2023 13:33:35 UTC] PHP Notice:  Undefined index: item_qty in /home4/uumitpro/public_html/barterIt/seller/load_item.php on line 25
+[03-Jun-2023 13:34:38 UTC] PHP Notice:  Undefined index: item_qty in /home4/uumitpro/public_html/barterIt/seller/load_item.php on line 25
+[03-Jun-2023 13:36:23 UTC] PHP Notice:  Undefined index: item_qty in /home4/uumitpro/public_html/barterIt/seller/load_item.php on line 25
+[03-Jun-2023 13:37:00 UTC] PHP Notice:  Undefined index: item_qty in /home4/uumitpro/public_html/barterIt/seller/load_item.php on line 25
+[03-Jun-2023 13:38:00 UTC] PHP Notice:  Undefined index: item_qty in /home4/uumitpro/public_html/barterIt/seller/load_item.php on line 25
+[10-Jun-2023 02:55:07 UTC] PHP Notice:  Undefined index: userid in /home4/uumitpro/public_html/barterIt/seller/load_item.php on line 10
+[10-Jun-2023 02:56:06 UTC] PHP Notice:  Undefined index: userid in /home4/uumitpro/public_html/barterIt/seller/load_item.php on line 10
+[10-Jun-2023 02:56:34 UTC] PHP Notice:  Undefined index: userid in /home4/uumitpro/public_html/barterIt/seller/load_item.php on line 10
+[10-Jun-2023 02:57:12 UTC] PHP Notice:  Undefined index: userid in /home4/uumitpro/public_html/barterIt/seller/load_item.php on line 10
+[10-Jun-2023 02:57:14 UTC] PHP Notice:  Undefined index: userid in /home4/uumitpro/public_html/barterIt/seller/load_item.php on line 10
+[18-Jul-2023 14:00:59 UTC] PHP Notice:  Trying to get property 'num_rows' of non-object in /home4/uumitpro/public_html/barterIt/seller/load_seller_order.php on line 17
+[18-Jul-2023 14:01:02 UTC] PHP Notice:  Trying to get property 'num_rows' of non-object in /home4/uumitpro/public_html/barterIt/seller/load_seller_order.php on line 17
+[18-Jul-2023 14:01:33 UTC] PHP Notice:  Trying to get property 'num_rows' of non-object in /home4/uumitpro/public_html/barterIt/seller/load_seller_order.php on line 17
+[18-Jul-2023 14:02:28 UTC] PHP Notice:  Trying to get property 'num_rows' of non-object in /home4/uumitpro/public_html/barterIt/seller/load_seller_order.php on line 17
+[18-Jul-2023 14:03:06 UTC] PHP Notice:  Trying to get property 'num_rows' of non-object in /home4/uumitpro/public_html/barterIt/seller/load_seller_order.php on line 17
+[18-Jul-2023 14:03:24 UTC] PHP Notice:  Trying to get property 'num_rows' of non-object in /home4/uumitpro/public_html/barterIt/seller/load_seller_order.php on line 17
+[18-Jul-2023 14:04:18 UTC] PHP Notice:  Trying to get property 'num_rows' of non-object in /home4/uumitpro/public_html/barterIt/seller/load_seller_order.php on line 17
+[18-Jul-2023 15:31:27 UTC] PHP Notice:  Undefined variable: buyerid in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:31:27 UTC] PHP Notice:  Undefined variable: orderbill in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:31:27 UTC] PHP Notice:  Undefined variable: sellerid in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:32:30 UTC] PHP Notice:  Undefined variable: buyerid in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:32:30 UTC] PHP Notice:  Undefined variable: orderbill in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:32:30 UTC] PHP Notice:  Undefined variable: sellerid in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:33:22 UTC] PHP Notice:  Undefined variable: buyerid in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:33:22 UTC] PHP Notice:  Undefined variable: orderbill in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:33:22 UTC] PHP Notice:  Undefined variable: sellerid in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:33:28 UTC] PHP Notice:  Undefined variable: buyerid in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:33:28 UTC] PHP Notice:  Undefined variable: orderbill in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:33:28 UTC] PHP Notice:  Undefined variable: sellerid in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:34:29 UTC] PHP Notice:  Undefined variable: buyerid in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:34:29 UTC] PHP Notice:  Undefined variable: orderbill in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:34:29 UTC] PHP Notice:  Undefined variable: sellerid in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:35:06 UTC] PHP Notice:  Undefined variable: buyerid in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:35:06 UTC] PHP Notice:  Undefined variable: orderbill in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:35:06 UTC] PHP Notice:  Undefined variable: sellerid in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:35:56 UTC] PHP Notice:  Undefined variable: buyerid in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:35:56 UTC] PHP Notice:  Undefined variable: orderbill in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
+[18-Jul-2023 15:35:56 UTC] PHP Notice:  Undefined variable: sellerid in /home4/uumitpro/public_html/barterIt/seller/load_seller_orderdetails.php on line 11
