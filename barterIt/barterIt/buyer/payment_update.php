@@ -56,23 +56,18 @@ if ($signed === $data['x_signature']) {
                 }
                 
                 if ($seller == $seller_id){
-                    $singleorder = $singleorder + $order_paid;    
+                    $singleorder = $singleorder + $order_paid; 
                 }else{
                     $sqlorder ="INSERT INTO `tbl_orders`( `order_bill`, `order_paid`, `buyer_id`, `seller_id`, `order_date`, `order_status`) VALUES ('$receiptid','$singleorder','$userid','$seller','$date','New')";
                     $conn->query($sqlorder);
                     $seller = $seller_id;
                     $singleorder = 0;
+                    $singleorder = $singleorder + $order_paid;
                 }
                 
                 if ($i == ($numofrows-1)){
-                    if ($i==0){
-                        $sqlorder ="INSERT INTO `tbl_orders`( `order_bill`, `order_paid`, `buyer_id`, `seller_id`, `order_date`, `order_status`) VALUES ('$receiptid','$singleorder','$userid','$seller','$date','New')";
-                        $conn->query($sqlorder); 
-                    }else{
-                        $singleorder = $singleorder + $order_paid; 
-                        $sqlorder ="INSERT INTO `tbl_orders`( `order_bill`, `order_paid`, `buyer_id`, `seller_id`, `order_date`, `order_status`) VALUES ('$receiptid','$singleorder','$userid','$seller','$date','New')";
-                        $conn->query($sqlorder); 
-                    }
+                    $sqlorder ="INSERT INTO `tbl_orders`( `order_bill`, `order_paid`, `buyer_id`, `seller_id`, `order_date`, `order_status`) VALUES ('$receiptid','$singleorder','$userid','$seller','$date','New')";
+                    $conn->query($sqlorder); 
                 }
                 $i++;
                 
