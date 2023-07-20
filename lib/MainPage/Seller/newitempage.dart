@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:barter_it/Model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:http/http.dart' as http;
-
-import '../Model/user.dart';
 
 class NewItemPage extends StatefulWidget {
   const NewItemPage({
@@ -87,9 +86,6 @@ class _NewItemPageState extends State<NewItemPage> {
                   InkWell(
                     onTap: () {
                       _selectImage(1);
-                    },
-                    onLongPress: () {
-                      _deleteImageDialog();
                     },
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -479,44 +475,6 @@ class _NewItemPageState extends State<NewItemPage> {
     }
   }
 
-  void _deleteImageDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogcontext) {
-        return AlertDialog(
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0))),
-          title: const Text(
-            "Delete this image?",
-            style: TextStyle(),
-          ),
-          content: const Text("Are you sure?", style: TextStyle()),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(
-                "Yes",
-                style: TextStyle(),
-              ),
-              onPressed: () {
-                insertItem(context);
-                Navigator.of(dialogcontext).pop();
-              },
-            ),
-            TextButton(
-              child: const Text(
-                "No",
-                style: TextStyle(),
-              ),
-              onPressed: () {
-                Navigator.of(dialogcontext).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void insertDialog() {
     if (!_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context)
@@ -587,7 +545,7 @@ class _NewItemPageState extends State<NewItemPage> {
     String base64Image2 = base64Encode(_image2!.readAsBytesSync());
     String base64Image3 = base64Encode(_image3!.readAsBytesSync());
 
-    var url = "https://uumitproject.com/barterIt/seller/insertitem.php";
+    var url = "https://uumitproject.com/barterIt/seller/insert_item.php";
     var response = await http.post(Uri.parse(url), body: {
       "userid": widget.user.id.toString(),
       "itemname": itemname,

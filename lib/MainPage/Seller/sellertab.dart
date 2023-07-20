@@ -1,12 +1,14 @@
 import 'dart:convert';
 
-import 'package:barter_it/MainPage/editsellerdetails.dart';
+import 'package:barter_it/MainPage/Seller/editsellerdetails.dart';
+import 'package:barter_it/MainPage/Seller/salehistorypage.dart';
+import 'package:barter_it/MainPage/Seller/sellerorderpage.dart';
+import 'package:barter_it/Model/item.dart';
+import 'package:barter_it/Model/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../Model/item.dart';
-import '../Model/user.dart';
 import 'newitempage.dart';
 
 class SellerTab extends StatefulWidget {
@@ -26,18 +28,16 @@ class _SellerTabState extends State<SellerTab> {
   late List<Widget> tabchildren;
   String maintitle = "Seller";
   List<Item> itemList = <Item>[];
-
+  String status = "Loading...";
   @override
   void initState() {
     super.initState();
     loadSellerItems(context);
-    print("Seller");
   }
 
   @override
   void dispose() {
     super.dispose();
-    print("dispose");
   }
 
   @override
@@ -54,10 +54,48 @@ class _SellerTabState extends State<SellerTab> {
         title: Text(maintitle),
         automaticallyImplyLeading: false,
         backgroundColor: const Color.fromARGB(255, 21, 42, 78),
+        actions: [
+          PopupMenuButton(
+              // add icon, by default "3 dot" icon
+              // icon: Icon(Icons.book)
+              itemBuilder: (context) {
+            return [
+              const PopupMenuItem<int>(
+                value: 0,
+                child: Text("My Sale Order"),
+              ),
+              const PopupMenuItem<int>(
+                value: 1,
+                child: Text("Sale History"),
+              ),
+            ];
+          }, onSelected: (value) async {
+            if (value == 0) {
+              if (widget.user.id.toString() == "na") {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Please login/register an account")));
+                return;
+              }
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (content) => SellerOrderPage(
+                            user: widget.user,
+                          )));
+            } else if (value == 1) {
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (content) => SaleHistoryPage(
+                            user: widget.user,
+                          )));
+            } else if (value == 2) {}
+          }),
+        ],
       ),
       body: itemList.isEmpty
           ? const Center(
-              child: Text("No Data"),
+              child: Text("No selling item"),
             )
           : RefreshIndicator(
               onRefresh: () async {
@@ -66,10 +104,10 @@ class _SellerTabState extends State<SellerTab> {
               child: Column(children: [
                 Container(
                   height: 24,
-                  color: Colors.red,
+                  color: Theme.of(context).colorScheme.primary,
                   alignment: Alignment.center,
                   child: Text(
-                    "${itemList.length} Item Found",
+                    "${itemList.length} Selling Item/s",
                     style: const TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ),
@@ -128,7 +166,7 @@ class _SellerTabState extends State<SellerTab> {
               ]),
             ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.blueAccent,
+          backgroundColor: const Color.fromARGB(255, 55, 47, 171),
           onPressed: () async {
             await Navigator.push(
                 context,
@@ -146,14 +184,7 @@ class _SellerTabState extends State<SellerTab> {
   }
 
   Future loadSellerItems(context) async {
-    if (widget.user.id == "na") {
-      setState(() {
-        // titlecenter = "Unregistered User";
-      });
-      return;
-    }
-
-    var url = "https://uumitproject.com/barterIt/seller/load_item.php";
+    var url = "https://uumitproject.com/barterIt/seller/load_seller_item.php";
     var response =
         await http.post(Uri.parse(url), body: {"userid": widget.user.id});
 

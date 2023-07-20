@@ -1,9 +1,9 @@
+import 'package:barter_it/MainPage/Buyer/buyertab.dart';
+import 'package:barter_it/MainPage/Profile/profiletab.dart';
+import 'package:barter_it/MainPage/Seller/sellertab.dart';
 import 'package:flutter/material.dart';
 
 import '../Model/user.dart';
-import 'profiletab.dart';
-import 'buyertab.dart';
-import 'sellertab.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({

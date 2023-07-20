@@ -180,7 +180,6 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(
               height: 10,
             ),
-            
           ],
         )));
   }
@@ -210,8 +209,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    MainPage(user: user)));
+                builder: (BuildContext context) => MainPage(user: user)));
 
         Fluttertoast.showToast(
             msg: "Login Successful",

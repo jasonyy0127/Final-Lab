@@ -1,12 +1,15 @@
 import 'dart:convert';
 
-import 'package:barter_it/MainPage/viewbuyerdetails.dart';
+import 'package:barter_it/MainPage/Buyer/buyerdetailspage.dart';
+import 'package:barter_it/MainPage/Buyer/buyerorderhistory.dart';
+import 'package:barter_it/MainPage/Buyer/buyerorderpage.dart';
+import 'package:barter_it/Model/item.dart';
+import 'package:barter_it/Model/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
-import '../Model/item.dart';
-import '../Model/user.dart';
 import 'buyercartpage.dart';
 
 class BuyerTab extends StatefulWidget {
@@ -31,12 +34,20 @@ class _BuyerTabState extends State<BuyerTab> {
   int numberofresult = 0;
   var color;
   int cartqty = 0;
+  int numberofcartitem = 0;
+  String selectedType = "Tool";
+  List<String> itemlist = [
+    "Tool",
+    "Clothing",
+    "Food",
+    "Other",
+  ];
 
   TextEditingController searchController = TextEditingController();
   @override
   void initState() {
     super.initState();
-    loadBuyerItems(1);
+    loadBuyerItems();
     print("Buyer");
   }
 
@@ -76,22 +87,58 @@ class _BuyerTabState extends State<BuyerTab> {
             icon: const Icon(
               Icons.shopping_cart,
             ), // Your icon here
-            label: Text(cartqty.toString()), // Your text here
+            label: Text(numberofcartitem.toString()), // Your text here
             onPressed: () async {
-              if (cartqty > 0) {
+              if (numberofcartitem > 0) {
                 await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (content) => BuyerCartPage(
                               user: widget.user,
                             )));
-                loadBuyerItems(1);
+                loadBuyerItems();
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("No item in cart")));
               }
             },
-          )
+          ),
+          PopupMenuButton(
+              // add icon, by default "3 dot" icon
+              // icon: Icon(Icons.book)
+              itemBuilder: (context) {
+            return [
+              const PopupMenuItem<int>(
+                value: 0,
+                child: Text("My Order"),
+              ),
+              const PopupMenuItem<int>(
+                value: 1,
+                child: Text("History"),
+              ),
+            ];
+          }, onSelected: (value) async {
+            if (value == 0) {
+              if (widget.user.id.toString() == "na") {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Please login/register an account")));
+                return;
+              }
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (content) => BuyerOrderPage(
+                            user: widget.user,
+                          )));
+            } else if (value == 1) {
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (content) => BuyerOrderHistory(
+                            user: widget.user,
+                          )));
+            } else if (value == 2) {}
+          }),
         ],
       ),
       body: itemList.isEmpty
@@ -101,10 +148,10 @@ class _BuyerTabState extends State<BuyerTab> {
           : Column(children: [
               Container(
                 height: 24,
-                color: Colors.red,
+                color: Theme.of(context).colorScheme.primary,
                 alignment: Alignment.center,
                 child: Text(
-                  "${itemList.length} Items Found",
+                  "$numberofresult Items On Sale",
                   style: const TextStyle(color: Colors.white, fontSize: 18),
                 ),
               ),
@@ -116,16 +163,18 @@ class _BuyerTabState extends State<BuyerTab> {
                         (index) {
                           return Card(
                             child: InkWell(
-                              onTap: () {
+                              onTap: () async {
                                 Item userItem =
                                     Item.fromJson(itemList[index].toJson());
-                                Navigator.push(
+                                await Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (content) => ViewBuyerDetails(
+                                        builder: (content) => BuyerDetailsPage(
                                               user: widget.user,
                                               buyeritem: userItem,
+                                              page: curpage,
                                             )));
+                                loadBuyerItems();
                               },
                               child: Column(children: [
                                 CachedNetworkImage(
@@ -172,7 +221,14 @@ class _BuyerTabState extends State<BuyerTab> {
                     return TextButton(
                         onPressed: () {
                           curpage = index + 1;
-                          loadBuyerItems(index + 1);
+                          if (searchController.text.isNotEmpty) {
+                            searchItem(searchController.text);
+                          } else if (selectedOption.isNotEmpty &&
+                              option.isNotEmpty) {
+                            filterItem(option);
+                          } else {
+                            loadBuyerItems();
+                          }
                         },
                         child: Text(
                           (index + 1).toString(),
@@ -185,29 +241,28 @@ class _BuyerTabState extends State<BuyerTab> {
     );
   }
 
-  void loadBuyerItems(int pg) {
+  void loadBuyerItems() {
     http.post(
-        Uri.parse("https://uumitproject.com/barterIt/buyer/load_item.php"),
+        Uri.parse(
+            "https://uumitproject.com/barterIt/buyer/load_buyer_item.php"),
         body: {
           "cartuserid": widget.user.id,
-          "pageno": pg.toString()
+          "pageno": curpage.toString()
         }).then((response) {
       //print(response.body);
+      //log(response.body);
       itemList.clear();
       if (response.statusCode == 200) {
         var jsondata = jsonDecode(response.body);
         if (jsondata['status'] == "success") {
           numofpage = int.parse(jsondata['numofpage']); //get number of pages
           numberofresult = int.parse(jsondata['numberofresult']);
-          print(numofpage);
-          print(numberofresult);
           var extractdata = jsondata['data'];
           cartqty = int.parse(jsondata['cartqty'].toString());
-          print(cartqty);
+          numberofcartitem = int.parse(jsondata['numberofcartitem'].toString());
           extractdata['items'].forEach((v) {
             itemList.add(Item.fromJson(v));
           });
-          print(itemList[0].itemName);
         }
         setState(() {});
       }
@@ -244,13 +299,38 @@ class _BuyerTabState extends State<BuyerTab> {
             const SizedBox(
               height: 10,
             ),
-            ElevatedButton(
-              onPressed: () {
-                String search = searchController.text;
-                searchItem(search);
-                Navigator.of(context).pop();
-              },
-              child: const Text("Search"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Container(),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        String search = searchController.text;
+                        searchItem(search);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("Search"),
+                    ),
+                  ),
+                ),
+                Expanded(
+                    flex: 3,
+                    child: TextButton(
+                        onPressed: clearSearch,
+                        child: const Text(
+                          "clear",
+                          style: TextStyle(
+                              color: Colors.red,
+                              decoration: TextDecoration.underline),
+                        ))),
+              ],
             )
           ]),
         );
@@ -260,18 +340,26 @@ class _BuyerTabState extends State<BuyerTab> {
 
   void searchItem(String search) {
     http.post(
-        Uri.parse("https://uumitproject.com/barterIt/buyer/load_item.php"),
-        body: {"search": search}).then((response) {
-      //print(response.body);
+        Uri.parse(
+            "https://uumitproject.com/barterIt/buyer/load_buyer_item.php"),
+        body: {
+          "cartuserid": widget.user.id,
+          "search": search,
+          "pageno": curpage.toString()
+        }).then((response) {
+      // print(response.body);
       itemList.clear();
       if (response.statusCode == 200) {
         var jsondata = jsonDecode(response.body);
         if (jsondata['status'] == "success") {
+          numofpage = int.parse(jsondata['numofpage']); //get number of pages
+          numberofresult = int.parse(jsondata['numberofresult']);
           var extractdata = jsondata['data'];
+          cartqty = int.parse(jsondata['cartqty'].toString());
+          numberofcartitem = int.parse(jsondata['numberofcartitem'].toString());
           extractdata['items'].forEach((v) {
             itemList.add(Item.fromJson(v));
           });
-          print(itemList[0].itemName);
         }
         setState(() {});
       }
@@ -279,7 +367,6 @@ class _BuyerTabState extends State<BuyerTab> {
   }
 
   void showfilterDialog() {
-    selectedOption = '';
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -346,15 +433,77 @@ class _BuyerTabState extends State<BuyerTab> {
                     },
                     title: const Text('Price: High to Low'),
                   ),
+                  RadioListTile(
+                    value: '5',
+                    groupValue: selectedOption,
+                    onChanged: (value) {
+                      setState(() {
+                        option = '5';
+                        selectedOption = value!;
+                      });
+                    },
+                    title: SizedBox(
+                      height: 60,
+                      child: DropdownButton(
+                        //sorting dropdownoption
+                        // Not necessary for Option 1
+                        value: selectedType,
+                        onChanged: (newValue) {
+                          setState(() {
+                            selectedType = newValue!;
+                            print(selectedType);
+                          });
+                        },
+                        items: itemlist.map((selectedType) {
+                          return DropdownMenuItem(
+                            value: selectedType,
+                            child: Text(
+                              selectedType,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      filterItem(option);
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("Apply"),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: Container(),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Container(
+                            alignment: Alignment.center,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                filterItem(option);
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("Apply"),
+                            )),
+                      ),
+                      Expanded(
+                          flex: 3,
+                          child: TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  selectedOption = '';
+                                  option = '';
+                                });
+                                clearFilter;
+                              },
+                              child: const Text(
+                                "clear",
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    decoration: TextDecoration.underline),
+                              ))),
+                    ],
                   )
                 ]),
           );
@@ -366,18 +515,40 @@ class _BuyerTabState extends State<BuyerTab> {
   void filterItem(String option) {
     print(option);
     http.post(
-        Uri.parse("https://uumitproject.com/barterIt/buyer/load_item.php"),
-        body: {"option": option}).then((response) {
+        Uri.parse(
+            "https://uumitproject.com/barterIt/buyer/load_buyer_item.php"),
+        body: {
+          "cartuserid": widget.user.id,
+          "option": option,
+          "type": selectedType,
+          "pageno": curpage.toString()
+        }).then((response) {
       //print(response.body);
       itemList.clear();
       if (response.statusCode == 200) {
         var jsondata = jsonDecode(response.body);
+        print(response.body);
         if (jsondata['status'] == "success") {
+          numofpage = int.parse(jsondata['numofpage']); //get number of pages
+          numberofresult = int.parse(jsondata['numberofresult']);
           var extractdata = jsondata['data'];
+          cartqty = int.parse(jsondata['cartqty'].toString());
+          numberofcartitem = int.parse(jsondata['numberofcartitem'].toString());
           extractdata['items'].forEach((v) {
             itemList.add(Item.fromJson(v));
           });
-          print(itemList[0].itemName);
+        } else {
+          Fluttertoast.showToast(
+              msg: "No filter selected",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              fontSize: 16.0);
+          if (searchController.text.isNotEmpty) {
+            searchItem(searchController.text);
+          } else {
+            loadBuyerItems();
+          }
         }
         setState(() {});
       }
@@ -401,5 +572,13 @@ class _BuyerTabState extends State<BuyerTab> {
         ),
       ),
     );
+  }
+
+  clearSearch() {
+    searchController.clear();
+  }
+
+  clearFilter() {
+    selectedOption = '';
   }
 }

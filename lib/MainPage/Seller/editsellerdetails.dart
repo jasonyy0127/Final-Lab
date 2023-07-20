@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:barter_it/Model/item.dart';
+import 'package:barter_it/Model/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-import '../Model/item.dart';
-import '../Model/user.dart';
 
 class EditSellerDetails extends StatefulWidget {
   const EditSellerDetails({
@@ -23,7 +22,6 @@ class EditSellerDetails extends StatefulWidget {
 }
 
 class _EditSellerDetailsState extends State<EditSellerDetails> {
-  File? _image;
   var pathAsset = "assets/images/camera.png";
   final _formKey = GlobalKey<FormState>();
   late double screenHeight, screenWidth, cardwitdh;
@@ -86,7 +84,7 @@ class _EditSellerDetailsState extends State<EditSellerDetails> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                     child: Card(
-                      child: Container(
+                      child: SizedBox(
                         width: screenWidth,
                         child: CachedNetworkImage(
                           width: screenWidth,
@@ -96,7 +94,7 @@ class _EditSellerDetailsState extends State<EditSellerDetails> {
                           placeholder: (context, url) =>
                               const LinearProgressIndicator(),
                           errorWidget: (context, url, error) => const Center(
-                            child: Text("No Other Photos",
+                            child: Text("No Photo",
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                                 textAlign: TextAlign.center),
@@ -108,7 +106,7 @@ class _EditSellerDetailsState extends State<EditSellerDetails> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                     child: Card(
-                      child: Container(
+                      child: SizedBox(
                         width: screenWidth,
                         child: CachedNetworkImage(
                           width: screenWidth,
@@ -130,7 +128,7 @@ class _EditSellerDetailsState extends State<EditSellerDetails> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                     child: Card(
-                      child: Container(
+                      child: SizedBox(
                         height: screenHeight,
                         width: screenWidth,
                         child: CachedNetworkImage(

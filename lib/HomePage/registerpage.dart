@@ -18,6 +18,7 @@ class _RegisterPageState extends State<RegisterPage> {
   late double screenHeight;
   final TextEditingController _nameEditingController = TextEditingController();
   final TextEditingController _emailEditingController = TextEditingController();
+  final TextEditingController _phoneEditingController = TextEditingController();
   final TextEditingController _pass1EditingController = TextEditingController();
   final TextEditingController _pass2EditingController = TextEditingController();
   bool _passwordVisible = true;
@@ -77,6 +78,20 @@ class _RegisterPageState extends State<RegisterPage> {
                                     labelText: 'Name',
                                     labelStyle: TextStyle(),
                                     icon: Icon(Icons.person),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(width: 2.0),
+                                    ))),
+                            TextFormField(
+                                keyboardType: TextInputType.phone,
+                                validator: (val) => val!.isEmpty ||
+                                        (val.length < 10)
+                                    ? "phone must be longer or equal than 10"
+                                    : null,
+                                controller: _phoneEditingController,
+                                decoration: const InputDecoration(
+                                    labelText: 'Phone',
+                                    labelStyle: TextStyle(),
+                                    icon: Icon(Icons.phone),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(width: 2.0),
                                     ))),
@@ -338,6 +353,7 @@ class _RegisterPageState extends State<RegisterPage> {
     var url = "https://uumitproject.com/barterIt/homepage/register.php";
     var response = await http.post(Uri.parse(url), body: {
       "name": _nameEditingController.text,
+      "phone": _phoneEditingController.text,
       "email": _emailEditingController.text,
       "password": _pass2EditingController.text,
     });
